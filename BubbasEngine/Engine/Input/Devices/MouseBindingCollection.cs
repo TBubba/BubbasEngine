@@ -12,9 +12,10 @@ namespace BubbasEngine.Engine.Input.Devices
         private Dictionary<Mouse.Button, List<EventHandler<MouseButtonEventArgs2>>> _onButtonPressed;
         private Dictionary<Mouse.Button, List<EventHandler<MouseButtonEventArgs2>>> _onButtonReleased;
         private List<EventHandler<MouseWheelEventArgs2>> _onWheelMoved;
-        private List<MouseMoveEventArgs2> _onMoved;
+        private List<EventHandler<MouseMoveEventArgs2>> _onMoved;
 
         // Internal
+        /*
         internal Dictionary<Mouse.Button, List<EventHandler<MouseButtonEventArgs2>>> OnButtonPressed
         { get { return _onButtonPressed; } }
         internal Dictionary<Mouse.Button, List<EventHandler<MouseButtonEventArgs2>>> OnButtonReleased
@@ -23,6 +24,7 @@ namespace BubbasEngine.Engine.Input.Devices
         { get { return _onWheelMoved; } }
         internal List<MouseMoveEventArgs2> OnMoved
         { get { return _onMoved; } }
+        */
 
         // Constructor(s)
         public MouseBindingCollection()
@@ -36,6 +38,10 @@ namespace BubbasEngine.Engine.Input.Devices
         // Add
         public void AddOnPressed(Mouse.Button button, EventHandler<MouseButtonEventArgs2> bind)
         {
+            // Throw if "count" is passed
+            if (button == Mouse.Button.ButtonCount)
+                throw new Exception("Button.ButtonCount is not a valid button");
+
             // Create if it doesnt exist
             if (!_onButtonPressed.ContainsKey(button))
                 _onButtonPressed.Add(button, new List<EventHandler<MouseButtonEventArgs2>>());
@@ -45,12 +51,34 @@ namespace BubbasEngine.Engine.Input.Devices
         }
         public void AddOnReleased(Mouse.Button button, EventHandler<MouseButtonEventArgs2> bind)
         {
+            // Throw if "count" is passed
+            if (button == Mouse.Button.ButtonCount)
+                throw new Exception("Button.ButtonCount is not a valid button");
+
             // Create if it doesnt exist
             if (!_onButtonReleased.ContainsKey(button))
                 _onButtonReleased.Add(button, new List<EventHandler<MouseButtonEventArgs2>>());
 
             // Add
             _onButtonReleased[button].Add(bind);
+        }
+        public void AddOnAnyPressed(EventHandler<MouseButtonEventArgs2> bind)
+        {
+            // Create if it doesnt exist
+            if (!_onButtonPressed.ContainsKey(Mouse.Button.ButtonCount)) // ButtonCount is used as "Any button"
+                _onButtonPressed.Add(Mouse.Button.ButtonCount, new List<EventHandler<MouseButtonEventArgs2>>());
+
+            // Add
+            _onButtonPressed[Mouse.Button.ButtonCount].Add(bind);
+        }
+        public void AddOnAnyReleased(EventHandler<MouseButtonEventArgs2> bind)
+        {
+            // Create if it doesnt exist
+            if (!_onButtonReleased.ContainsKey(Mouse.Button.ButtonCount))
+                _onButtonReleased.Add(Mouse.Button.ButtonCount, new List<EventHandler<MouseButtonEventArgs2>>());
+
+            // Add
+            _onButtonReleased[Mouse.Button.ButtonCount].Add(bind);
         }
         public void AddOnWheelChanged(EventHandler<MouseWheelEventArgs2> bind)
         {
@@ -66,6 +94,10 @@ namespace BubbasEngine.Engine.Input.Devices
         // Remove
         public void RemoveOnPressed(Mouse.Button button, EventHandler<MouseButtonEventArgs2> bind)
         {
+            // Throw if "count" is passed
+            if (button == Mouse.Button.ButtonCount)
+                throw new Exception("Button.ButtonCount is not a valid button");
+
             // Remove
             if (_onButtonPressed.ContainsKey(button))
             {
@@ -86,8 +118,34 @@ namespace BubbasEngine.Engine.Input.Devices
             else
                 GameConsole.WriteLine(string.Format("InputMouse: Tried to remove keybinding from non-bound button (Button:{0}, OnPressed)", button), GameConsole.MessageType.Error); // Debug
         }
+        public void RemoveOnAnyPressed(EventHandler<MouseButtonEventArgs2> bind)
+        {
+            // Remove
+            if (_onButtonPressed.ContainsKey(Mouse.Button.ButtonCount))
+            {
+                // Remove keybinding
+                if (!_onButtonPressed[Mouse.Button.ButtonCount].Remove(bind))
+                {
+                    GameConsole.WriteLine(string.Format("InputMouse: Tried to remove non-exsiting keybinding (Button:{0}, OnPressed)", button), GameConsole.MessageType.Error); // Debug
+                    return;
+                }
+
+                // Remove this key from the dictionary if there are no keybindings left
+                if (_onButtonPressed[Mouse.Button.ButtonCount].Count == 0)
+                {
+                    _onButtonPressed.Remove(Mouse.Button.ButtonCount);
+                    GameConsole.WriteLine(string.Format("InputMouse: No more keybindings to this button - therefore remove button (Button:{0}, OnPressed)", button), GameConsole.MessageType.Important); // Debug
+                }
+            }
+            else
+                GameConsole.WriteLine(string.Format("InputMouse: Tried to remove keybinding from non-bound button (Button:{0}, OnPressed)", button), GameConsole.MessageType.Error); // Debug
+        }
         public void RemoveOnReleased(Mouse.Button button, EventHandler<MouseButtonEventArgs2> bind)
         {
+            // Throw if "count" is passed
+            if (button == Mouse.Button.ButtonCount)
+                throw new Exception("Button.ButtonCount is not a valid button");
+
             // Remove
             if (_onButtonReleased.ContainsKey(button))
             {
@@ -102,6 +160,28 @@ namespace BubbasEngine.Engine.Input.Devices
                 if (_onButtonReleased[button].Count == 0)
                 {
                     _onButtonReleased.Remove(button);
+                    GameConsole.WriteLine(string.Format("InputMouse: No more keybindings to this button - therefore remove button (Button:{0}, OnReleased)", button), GameConsole.MessageType.Important); // Debug
+                }
+            }
+            else
+                GameConsole.WriteLine(string.Format("InputMouse: Tried to remove keybinding from non-bound button (Button:{0}, OnReleased)", button), GameConsole.MessageType.Error); // Debug
+        }
+        public void RemoveOnAnyReleased(EventHandler<MouseButtonEventArgs2> bind)
+        {
+            // Remove
+            if (_onButtonReleased.ContainsKey(Mouse.Button.ButtonCount))
+            {
+                // Remove keybinding
+                if (!_onButtonReleased[Mouse.Button.ButtonCount].Remove(bind))
+                {
+                    GameConsole.WriteLine(string.Format("InputMouse: Tried to remove non-exsiting keybinding (Button:{0}, OnReleased)", button), GameConsole.MessageType.Error); // Debug
+                    return;
+                }
+
+                // Remove this key from the dictionary if there are no keybindings left
+                if (_onButtonReleased[Mouse.Button.ButtonCount].Count == 0)
+                {
+                    _onButtonReleased.Remove(Mouse.Button.ButtonCount);
                     GameConsole.WriteLine(string.Format("InputMouse: No more keybindings to this button - therefore remove button (Button:{0}, OnReleased)", button), GameConsole.MessageType.Important); // Debug
                 }
             }
@@ -192,6 +272,17 @@ namespace BubbasEngine.Engine.Input.Devices
             for (int i = 0; i < count; i++)
             {
                 device.RemoveOnMoved(_onMoved[i]);
+            }
+        }
+
+        // Call
+        internal void OnPressed(object sender, MouseButtonEventArgs2 args)
+        {
+            switch (args.Button)
+            {
+                case Mouse.Button.ButtonCount: // Any button
+                    _
+                    break;
             }
         }
     }

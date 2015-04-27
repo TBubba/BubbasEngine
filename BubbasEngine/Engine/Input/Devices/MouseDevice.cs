@@ -5,9 +5,12 @@ using System.Text;
 using SFML.Window;
 using BubbasEngine.Engine.Windows;
 using BubbasEngine.Engine.GameStates;
+using System.Runtime.InteropServices;
+using System.Security;
 
 namespace BubbasEngine.Engine.Input.Devices
 {
+
     // Event args
     public class MouseWheelEventArgs2 : EventArgs
     {
@@ -56,9 +59,34 @@ namespace BubbasEngine.Engine.Input.Devices
         }
     }
 
-
     public class MouseDevice
     {
+        ////////////////////////////////////////////////////////////
+        /// <summary>
+        /// Mouse buttons
+        /// </summary>
+        ////////////////////////////////////////////////////////////
+        public enum Button
+        {
+            /// <summary>The left mouse button</summary>
+            Left,
+
+            /// <summary>The right mouse button</summary>
+            Right,
+
+            /// <summary>The middle (wheel) mouse button</summary>
+            Middle,
+
+            /// <summary>The first extra mouse button</summary>
+            XButton1,
+
+            /// <summary>The second extra mouse button</summary>
+            XButton2,
+
+            /// <summary>Keep last -- the total number of mouse buttons</summary>
+            ButtonCount
+        };
+
         // Private
         private bool[] _buttonDown; // Button states (true = down)
 
@@ -70,11 +98,6 @@ namespace BubbasEngine.Engine.Input.Devices
 
         private MouseBindingCollection _bindings; // Directly bound input (through the input class)
         private Dictionary<GameState, MouseBindingCollection> _gameBindings; // Input bound through game states
-
-        private EventHandler<MouseButtonEventArgs> _onButtonPressedEvent; // Handlers for window events
-        private EventHandler<MouseButtonEventArgs> _onButtonReleasedEvent;
-        private EventHandler<MouseWheelEventArgs> _onWheelMovedEvent;
-        private EventHandler<MouseMoveEventArgs> _onMovedEvent;
 
         private Action _beginFrame;
         private Action _update;
@@ -101,12 +124,6 @@ namespace BubbasEngine.Engine.Input.Devices
             //
             _bindings = new MouseBindingCollection();
             _gameBindings = new Dictionary<GameState, MouseBindingCollection>();
-
-            // Create Events
-            _onButtonPressedEvent = new EventHandler<MouseButtonEventArgs>(OnButtonPressed);
-            _onButtonReleasedEvent = new EventHandler<MouseButtonEventArgs>(OnButtonReleased);
-            _onWheelMovedEvent = new EventHandler<MouseWheelEventArgs>(OnWheelMoved);
-            _onMovedEvent = new EventHandler<MouseMoveEventArgs>(OnMoved);
         }
 
         //
@@ -270,10 +287,10 @@ namespace BubbasEngine.Engine.Input.Devices
         internal void ApplyWindow(GameWindow window)
         {
             // Apply events to windows
-            window.MouseButtonPressed += _onButtonPressedEvent;
-            window.MouseButtonReleased += _onButtonReleasedEvent;
-            window.MouseWheelMoved += _onWheelMovedEvent;
-            window.MouseMoved += _onMovedEvent;
+            window.MouseButtonPressed += OnButtonPressed;
+            window.MouseButtonReleased += OnButtonReleased;
+            window.MouseWheelMoved += OnWheelMoved;
+            window.MouseMoved += OnMoved;
 
             // Keep window
             _window = window;
@@ -281,17 +298,14 @@ namespace BubbasEngine.Engine.Input.Devices
         internal void RemoveWindow(GameWindow window)
         {
             // Remove events from windows
-            window.MouseButtonPressed -= _onButtonPressedEvent;
-            window.MouseButtonReleased -= _onButtonReleasedEvent;
-            window.MouseWheelMoved -= _onWheelMovedEvent;
-            window.MouseMoved -= _onMovedEvent;
+            window.MouseButtonPressed -= OnButtonPressed;
+            window.MouseButtonReleased -= OnButtonReleased;
+            window.MouseWheelMoved -= OnWheelMoved;
+            window.MouseMoved -= OnMoved;
 
             // Forget window
             _window = window;
         }
-
-        //
-
 
         // Events
         private void OnButtonPressed(object sender, MouseButtonEventArgs e)
@@ -401,5 +415,16 @@ namespace BubbasEngine.Engine.Input.Devices
 
             //GameConsole.WriteLine(string.Format("InputMouse: Moved mouse to {0};{1}", e.X, e.Y)); // Debug
         }
+
+        #region Imports
+        [DllImport("csfml-window-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+        static extern bool sfMouse_isButtonPressed(Button button);
+
+        [DllImport("csfml-window-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+        static extern Vector2i sfMouse_getPosition(IntPtr relativeTo);
+
+        [DllImport("csfml-window-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+        static extern void sfMouse_setPosition(Vector2i position, IntPtr relativeTo);
+        #endregion
     }
 }
