@@ -3,6 +3,9 @@
 *.user
 *.sln.docstates
 
-# Output Folders
+# Build Output Folders
 *\bin
 *\obj
+
+# Output Folder
+output

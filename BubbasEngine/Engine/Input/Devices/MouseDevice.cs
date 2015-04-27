@@ -146,7 +146,7 @@ namespace BubbasEngine.Engine.Input.Devices
         }
 
         // Add
-        public void AddOnPressed(Mouse.Button button, MouseButtonBinding bind)
+        public void AddOnPressed(Mouse.Button button, EventHandler<MouseButtonEventArgs2> bind)
         {
             _beginFrame += delegate
             {
@@ -158,7 +158,7 @@ namespace BubbasEngine.Engine.Input.Devices
                 _onButtonPressed[button].Add(bind);
             };
         }
-        public void AddOnReleased(Mouse.Button button, MouseButtonBinding bind)
+        public void AddOnReleased(Mouse.Button button, EventHandler<MouseButtonEventArgs2> bind)
         {
             _beginFrame += delegate
             {
@@ -170,7 +170,7 @@ namespace BubbasEngine.Engine.Input.Devices
                 _onButtonReleased[button].Add(bind);
             };
         }
-        public void AddOnWheelChanged(MouseWheelBinding bind)
+        public void AddOnWheelChanged(EventHandler<MouseWheelEventArgs2> bind)
         {
             _beginFrame += delegate
             {
@@ -178,7 +178,7 @@ namespace BubbasEngine.Engine.Input.Devices
                 _onWheelMoved.Add(bind);
             };
         }
-        public void AddOnMoved(MouseMoveBinding bind)
+        public void AddOnMoved(EventHandler<MouseMoveEventArgs2> bind)
         {
             _beginFrame += delegate
             {
@@ -188,7 +188,7 @@ namespace BubbasEngine.Engine.Input.Devices
         }
 
         // Remove
-        public void RemoveOnPressed(Mouse.Button button, MouseButtonBinding bind)
+        public void RemoveOnPressed(Mouse.Button button, EventHandler<MouseButtonEventArgs2> bind)
         {
             _beginFrame += delegate
             {
@@ -213,7 +213,7 @@ namespace BubbasEngine.Engine.Input.Devices
                     GameConsole.WriteLine(string.Format("InputMouse: Tried to remove keybinding from non-bound button (Button:{0}, OnPressed)", button), GameConsole.MessageType.Error); // Debug
             };
         }
-        public void RemoveOnReleased(Mouse.Button button, MouseButtonBinding bind)
+        public void RemoveOnReleased(Mouse.Button button, EventHandler<MouseButtonEventArgs2> bind)
         {
             _beginFrame += delegate
             {
@@ -238,7 +238,7 @@ namespace BubbasEngine.Engine.Input.Devices
                     GameConsole.WriteLine(string.Format("InputMouse: Tried to remove keybinding from non-bound button (Button:{0}, OnReleased)", button), GameConsole.MessageType.Error); // Debug
             };
         }
-        public void RemoveOnWheelChanged(MouseWheelBinding bind)
+        public void RemoveOnWheelChanged(EventHandler<MouseWheelEventArgs2> bind)
         {
             _beginFrame += delegate
             {
@@ -251,7 +251,7 @@ namespace BubbasEngine.Engine.Input.Devices
                     GameConsole.WriteLine(string.Format("InputMouse: Tried to remove non-exsiting keybinding (OnWheelChanged)"), GameConsole.MessageType.Error); // Debug
             };
         }
-        public void RemoveOnMoved(MouseMoveBinding bind)
+        public void RemoveOnMoved(EventHandler<MouseMoveEventArgs2> bind)
         {
             _beginFrame += delegate
             {
