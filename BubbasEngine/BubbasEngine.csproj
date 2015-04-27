@@ -1,0 +1,258 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{39989CE8-750C-48BA-88F6-EEC39C0C1BBC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BubbasEngine</RootNamespace>
+    <AssemblyName>BubbasEngine</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Engine\Content\ContentManager.cs" />
+    <Compile Include="Engine\Content\ContentManagerArgs.cs" />
+    <Compile Include="Engine\Content\ContentContainer.cs" />
+    <Compile Include="Engine\Debugging\DebugArgs.cs" />
+    <Compile Include="Engine\Debugging\DebugGameState.cs" />
+    <Compile Include="Engine\GameStates\GameStateContainer.cs" />
+    <Compile Include="Engine\GameWorlds\EntityContainer.cs" />
+    <Compile Include="Engine\GameWorlds\GameInterfaces\IGamePhysics.cs" />
+    <Compile Include="Engine\GameWorlds\GameObject.cs" />
+    <Compile Include="Engine\GameWorlds\GameInterfaces\IGameAnimate.cs" />
+    <Compile Include="Engine\GameWorlds\GameInterfaces\IGameBeginFrame.cs" />
+    <Compile Include="Engine\GameWorlds\GameInterfaces\IGameCreated.cs" />
+    <Compile Include="Engine\GameWorlds\GameInterfaces\IGameRemoved.cs" />
+    <Compile Include="Engine\GameWorlds\GameInterfaces\IGameStep.cs" />
+    <Compile Include="Engine\GameWorlds\GameWorld.cs" />
+    <Compile Include="Engine\Graphics\Drawables\Shapes\BBodyShape.cs" />
+    <Compile Include="Engine\Graphics\RenderableContainer.cs" />
+    <Compile Include="Engine\Graphics\Drawables\Shapes\BCircleShape.cs" />
+    <Compile Include="Engine\Graphics\Drawables\Shapes\BConvexShape.cs" />
+    <Compile Include="Engine\Graphics\Drawables\Shapes\BRectangleShape.cs" />
+    <Compile Include="Engine\Graphics\Drawables\Shapes\BShape.cs" />
+    <Compile Include="Engine\Graphics\Drawables\BText.cs" />
+    <Compile Include="Engine\Graphics\Drawables\BVertexArray.cs" />
+    <Compile Include="Engine\Graphics\GraphicsLayerContainer.cs" />
+    <Compile Include="Engine\Input\Devices\JoystickDevice.cs" />
+    <Compile Include="Engine\Input\Devices\MouseBindingCollection.cs" />
+    <Compile Include="Engine\NativeMethods.cs" />
+    <Compile Include="Engine\GameArgs.cs" />
+    <Compile Include="Engine\GameConsole.cs" />
+    <Compile Include="Engine\GameEngine.cs" />
+    <Compile Include="Engine\GameStates\GameState.cs" />
+    <Compile Include="Engine\GameStates\GameStateCondition.cs" />
+    <Compile Include="Engine\GameStates\GameStateManager.cs" />
+    <Compile Include="Engine\GameStates\GameStateManagerArgs.cs" />
+    <Compile Include="Engine\Graphics\Drawables\BSprite.cs" />
+    <Compile Include="Engine\Graphics\Drawables\IRenderable.cs" />
+    <Compile Include="Engine\Graphics\GraphicsLayer.cs" />
+    <Compile Include="Engine\Graphics\GraphicsRenderer.cs" />
+    <Compile Include="Engine\Graphics\GraphicsRendererArgs.cs" />
+    <Compile Include="Engine\Maths.cs" />
+    <Compile Include="Engine\Physics\Collision\Collision.cs" />
+    <Compile Include="Engine\Physics\Collision\Distance.cs" />
+    <Compile Include="Engine\Physics\Collision\DynamicTree.cs" />
+    <Compile Include="Engine\Physics\Collision\DynamicTreeBroadPhase.cs" />
+    <Compile Include="Engine\Physics\Collision\IBroadPhase.cs" />
+    <Compile Include="Engine\Physics\Collision\Shapes\ChainShape.cs" />
+    <Compile Include="Engine\Physics\Collision\Shapes\CircleShape.cs" />
+    <Compile Include="Engine\Physics\Collision\Shapes\EdgeShape.cs" />
+    <Compile Include="Engine\Physics\Collision\Shapes\PolygonShape.cs" />
+    <Compile Include="Engine\Physics\Collision\Shapes\Shape.cs" />
+    <Compile Include="Engine\Physics\Collision\TimeOfImpact.cs" />
+    <Compile Include="Engine\Physics\Common\ConvexHull\ChainHull.cs" />
+    <Compile Include="Engine\Physics\Common\ConvexHull\GiftWrap.cs" />
+    <Compile Include="Engine\Physics\Common\ConvexHull\Melkman.cs" />
+    <Compile Include="Engine\Physics\Common\Curve.cs" />
+    <Compile Include="Engine\Physics\Common\CurveKey.cs" />
+    <Compile Include="Engine\Physics\Common\CurveKeyCollection.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\BayazitDecomposer.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\CDTDecomposer.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\CDT\Delaunay\DelaunayTriangle.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\CDT\Delaunay\Sweep\AdvancingFront.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\CDT\Delaunay\Sweep\AdvancingFrontNode.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\CDT\Delaunay\Sweep\DTSweep.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\CDT\Delaunay\Sweep\DTSweepConstraint.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\CDT\Delaunay\Sweep\DTSweepContext.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\CDT\Delaunay\Sweep\DTSweepPointComparator.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\CDT\Delaunay\Sweep\PointOnEdgeException.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\CDT\ITriangulatable.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\CDT\Orientation.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\CDT\Ploygon\Polygon.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\CDT\Ploygon\PolygonPoint.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\CDT\Ploygon\PolygonSet.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\CDT\Sets\ConstrainedPointSet.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\CDT\Sets\PointSet.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\CDT\TriangulationConstraint.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\CDT\TriangulationContext.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\CDT\TriangulationMode.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\CDT\TriangulationPoint.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\CDT\TriangulationUtil.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\CDT\Util\FixedArray3.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\CDT\Util\FixedBitArray3.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\CDT\Util\PointGenerator.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\CDT\Util\PolygonGenerator.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\EarclipDecomposer.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\FlipcodeDecomposer.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\SeidelDecomposer.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\Seidel\Edge.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\Seidel\MonotoneMountain.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\Seidel\Node.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\Seidel\Point.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\Seidel\QueryGraph.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\Seidel\Sink.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\Seidel\Trapezoid.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\Seidel\TrapezoidalMap.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\Seidel\Triangulator.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\Seidel\XNode.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\Seidel\YNode.cs" />
+    <Compile Include="Engine\Physics\Common\Decomposition\Triangulate.cs" />
+    <Compile Include="Engine\Physics\Common\FixedArray.cs" />
+    <Compile Include="Engine\Physics\Common\HashSet.cs" />
+    <Compile Include="Engine\Physics\Common\LineTools.cs" />
+    <Compile Include="Engine\Physics\Common\Math.cs" />
+    <Compile Include="Engine\Physics\Common\MathHelper.cs" />
+    <Compile Include="Engine\Physics\Common\Matrix.cs" />
+    <Compile Include="Engine\Physics\Common\Path.cs" />
+    <Compile Include="Engine\Physics\Common\PathManager.cs" />
+    <Compile Include="Engine\Physics\Common\PhysicsLogic\FilterData.cs" />
+    <Compile Include="Engine\Physics\Common\PhysicsLogic\PhysicsLogic.cs" />
+    <Compile Include="Engine\Physics\Common\PhysicsLogic\RealExplosion.cs" />
+    <Compile Include="Engine\Physics\Common\PhysicsLogic\SimpleExplosion.cs" />
+    <Compile Include="Engine\Physics\Common\PolygonManipulation\CuttingTools.cs" />
+    <Compile Include="Engine\Physics\Common\PolygonManipulation\SimpleCombiner.cs" />
+    <Compile Include="Engine\Physics\Common\PolygonManipulation\SimplifyTools.cs" />
+    <Compile Include="Engine\Physics\Common\PolygonManipulation\YuPengClipper.cs" />
+    <Compile Include="Engine\Physics\Common\PolygonTools.cs" />
+    <Compile Include="Engine\Physics\Common\Serialization.cs" />
+    <Compile Include="Engine\Physics\Common\Stopwatch.cs" />
+    <Compile Include="Engine\Physics\Common\TextureTools\MarchingSquares.cs" />
+    <Compile Include="Engine\Physics\Common\TextureTools\Terrain.cs" />
+    <Compile Include="Engine\Physics\Common\TextureTools\TextureConverter.cs" />
+    <Compile Include="Engine\Physics\Common\Vector2.cs" />
+    <Compile Include="Engine\Physics\Common\Vector3.cs" />
+    <Compile Include="Engine\Physics\Common\Vertices.cs" />
+    <Compile Include="Engine\Physics\Controllers\AbstractForceController.cs" />
+    <Compile Include="Engine\Physics\Controllers\BuoyancyController.cs" />
+    <Compile Include="Engine\Physics\Controllers\Controller.cs" />
+    <Compile Include="Engine\Physics\Controllers\GravityController.cs" />
+    <Compile Include="Engine\Physics\Controllers\SimpleWindForce.cs" />
+    <Compile Include="Engine\Physics\Controllers\VelocityLimitController.cs" />
+    <Compile Include="Engine\Physics\Dynamics\Body.cs" />
+    <Compile Include="Engine\Physics\Dynamics\BreakableBody.cs" />
+    <Compile Include="Engine\Physics\Dynamics\ContactManager.cs" />
+    <Compile Include="Engine\Physics\Dynamics\Contacts\Contact.cs" />
+    <Compile Include="Engine\Physics\Dynamics\Contacts\ContactSolver.cs" />
+    <Compile Include="Engine\Physics\Dynamics\Fixture.cs" />
+    <Compile Include="Engine\Physics\Dynamics\Island.cs" />
+    <Compile Include="Engine\Physics\Dynamics\Joints\AngleJoint.cs" />
+    <Compile Include="Engine\Physics\Dynamics\Joints\DistanceJoint.cs" />
+    <Compile Include="Engine\Physics\Dynamics\Joints\FixedMouseJoint.cs" />
+    <Compile Include="Engine\Physics\Dynamics\Joints\FrictionJoint.cs" />
+    <Compile Include="Engine\Physics\Dynamics\Joints\GearJoint.cs" />
+    <Compile Include="Engine\Physics\Dynamics\Joints\Joint.cs" />
+    <Compile Include="Engine\Physics\Dynamics\Joints\MotorJoint.cs" />
+    <Compile Include="Engine\Physics\Dynamics\Joints\PrismaticJoint.cs" />
+    <Compile Include="Engine\Physics\Dynamics\Joints\PulleyJoint.cs" />
+    <Compile Include="Engine\Physics\Dynamics\Joints\RevoluteJoint.cs" />
+    <Compile Include="Engine\Physics\Dynamics\Joints\RopeJoint.cs" />
+    <Compile Include="Engine\Physics\Dynamics\Joints\WeldJoint.cs" />
+    <Compile Include="Engine\Physics\Dynamics\Joints\WheelJoint.cs" />
+    <Compile Include="Engine\Physics\Dynamics\TimeStep.cs" />
+    <Compile Include="Engine\Physics\Dynamics\PhysicsWorld.cs" />
+    <Compile Include="Engine\Physics\Dynamics\PhysicsWorldCallbacks.cs" />
+    <Compile Include="Engine\Physics\Factories\BodyFactory.cs" />
+    <Compile Include="Engine\Physics\Factories\FixtureFactory.cs" />
+    <Compile Include="Engine\Physics\Factories\JointFactory.cs" />
+    <Compile Include="Engine\Physics\Factories\LinkFactory.cs" />
+    <Compile Include="Engine\Physics\Settings.cs" />
+    <Compile Include="Engine\TypeConverter.cs" />
+    <Compile Include="Engine\UnitConverter.cs" />
+    <Compile Include="Engine\Users\ILocalUser.cs" />
+    <Compile Include="Engine\Users\IWebUser.cs" />
+    <Compile Include="Engine\Users\User.cs" />
+    <Compile Include="Engine\Users\UserManager.cs" />
+    <Compile Include="Engine\Timing\TimeKeeper.cs" />
+    <Compile Include="Engine\Timing\TimeManager.cs" />
+    <Compile Include="Engine\Timing\TimeManagerArgs.cs" />
+    <Compile Include="Engine\Windows\GameWindow.cs" />
+    <Compile Include="Engine\Input\Devices\KeyboardDevice.cs" />
+    <Compile Include="Engine\Input\Devices\KeyboardBindingCollection.cs" />
+    <Compile Include="Engine\Input\Devices\MouseDevice.cs" />
+    <Compile Include="Engine\Input\InputManager.cs" />
+    <Compile Include="Engine\Input\InputSettings.cs" />
+    <Compile Include="Engine\Input\InputSettingsArgs.cs" />
+    <Compile Include="Engine\Windows\GameWindowArgs.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Engine\Audio\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="csfml-audio-2.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="csfml-graphics-2.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="csfml-window-2.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="libsndfile-1.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="openal32.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Graphics\sfml-graphics.csproj">
+      <Project>{46786269-57B9-48E7-AA4F-8F4D84609FE6}</Project>
+      <Name>sfml-graphics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Window\sfml-window.csproj">
+      <Project>{D17DE83D-A592-461F-8AF2-53F9E22E1D0F}</Project>
+      <Name>sfml-window</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
