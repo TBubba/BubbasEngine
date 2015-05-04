@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using SFML.Graphics;
 
-namespace BubbasEngine.Engine.Graphics
+namespace BubbasEngine.Engine.Graphics.Rendering
 {
     public class GraphicsLayerContainer
     {
@@ -33,7 +30,7 @@ namespace BubbasEngine.Engine.Graphics
         }
 
         // Render
-        internal void Render(RenderTarget target)
+        internal void Render(IRenderTarget target)
         {
             // Render all
             int length = _layers.Count;

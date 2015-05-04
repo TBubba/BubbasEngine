@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using BubbasEngine.Engine.Graphics.Drawables;
-using SFML.Graphics;
 
 namespace BubbasEngine.Engine.Graphics
 {
-    public delegate void RenderableEventDelegate(IRenderable renderable);
+    public delegate void RenderableEventDelegate(IDrawable renderable);
 
     public class RenderableContainer
     {
         // Private
-        private List<IRenderable> _renderables;
+        private List<IDrawable> _renderables;
 
         // Public
         public int Count
@@ -23,7 +20,7 @@ namespace BubbasEngine.Engine.Graphics
         public event RenderableEventDelegate OnRenderableRemoved;
 
         // Container
-        public IRenderable this[int index]
+        public IDrawable this[int index]
         {
             get { return _renderables[index]; }
         }
@@ -31,11 +28,11 @@ namespace BubbasEngine.Engine.Graphics
         // Constructor(s)
         internal RenderableContainer()
         {
-            _renderables = new List<IRenderable>();
+            _renderables = new List<IDrawable>();
         }
 
         // Render
-        internal void Render(RenderTarget target)
+        internal void Render(IRenderTarget target)
         {
             // Sort (Lowest first)
             _renderables.Sort((x, y) => -x.GetDepth().CompareTo(y.GetDepth()));
@@ -47,7 +44,7 @@ namespace BubbasEngine.Engine.Graphics
         }
 
         // Handle layers
-        public bool Add(IRenderable renderable)
+        public bool Add(IDrawable renderable)
         {
             // Abort if parameter is null
             if (renderable == null)
@@ -70,7 +67,7 @@ namespace BubbasEngine.Engine.Graphics
             return true;
         }
 
-        public bool Remove(IRenderable renderable)
+        public bool Remove(IDrawable renderable)
         {
             // Abort if parameter is null
             if (renderable == null)
@@ -143,7 +140,7 @@ namespace BubbasEngine.Engine.Graphics
         }
 
         //
-        public bool Contains(IRenderable rend)
+        public bool Contains(IDrawable rend)
         {
             // Compare paramter layer reference to every layer in the container
             int length = _renderables.Count;

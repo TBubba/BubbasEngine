@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using SFML.Window;
-using SFML.Graphics;
+using BubbasEngine.Engine.Generic;
+using BubbasEngine.Engine.Graphics;
+using BubbasEngine.Engine.Graphics.Drawables;
 
 namespace BubbasEngine.Engine.Windows
 {
@@ -33,8 +31,26 @@ namespace BubbasEngine.Engine.Windows
         }
     }
 
-    public class ShutWindowEventArgs : EventArgs
+    public class ResizedWindowEventArgs : EventArgs
     {
+        /// <summary>
+        /// New width of the window
+        /// </summary>
+        public uint Width;
+
+        /// <summary>
+        /// New height of the window
+        /// </summary>
+        public uint Height;
+
+        public ResizedWindowEventArgs()
+        {
+        }
+        public ResizedWindowEventArgs(uint width, uint height)
+        {
+            Width  = width;
+            Height = height;
+        }
     }
 
     public class GameWindow
@@ -80,8 +96,19 @@ namespace BubbasEngine.Engine.Windows
             // Initialize
             private void Initialize()
             {
-                //
+                // Proxy events
                 Closed += new EventHandler(ExposedWindow_Closed);
+                base.Resized += new EventHandler<SizeEventArgs>(ExposedWindow_Resized);
+            }
+
+            // Event "Proxies"
+            void ExposedWindow_Resized(object sender, SizeEventArgs e)
+            {
+                ResizedWindowEventArgs re = new ResizedWindowEventArgs(e.Width, e.Height);
+
+                // Dispatch event
+                if (Resized != null)
+                    Resized(this, re);
             }
 
             private void ExposedWindow_Closed(object sender, EventArgs e)
@@ -103,7 +130,8 @@ namespace BubbasEngine.Engine.Windows
             // Events
             internal event EventHandler<TitleChangedEventArgs> TitleChanged;
             internal event EventHandler<ClosingWindowEventArgs> Closing;
-            internal event EventHandler<ShutWindowEventArgs> Shut;
+            internal event EventHandler<EventArgs> Shut;
+            internal new event EventHandler<ResizedWindowEventArgs> Resized;
               
             // Set Focus (force)
             internal void SetFocus()
@@ -147,13 +175,22 @@ namespace BubbasEngine.Engine.Windows
         // EventHandlers
         EventHandler _gainedFocus;
         EventHandler _lostFocus;
-        EventHandler<ShutWindowEventArgs> _shutWindow;
+        EventHandler<EventArgs> _shutWindow;
 
         // Internal
-        internal RenderTarget Target
+        internal IRenderTarget Target
         { get { return _window; } }
         internal bool Open
         { get { return _open; } }
+
+        internal void SetMousePosition(Vector2i position)
+        {
+            _window.InternalSetMousePosition(position);
+        }
+        internal Vector2i GetMousePosition()
+        {
+            return _window.InternalGetMousePosition();
+        }
 
         // Public
         public Vector2i Position
@@ -184,7 +221,7 @@ namespace BubbasEngine.Engine.Windows
                 _window.SetFocus();
 
                 // Focus on click
-                MouseButtonPressed += new EventHandler<MouseButtonEventArgs>(delegate
+                MouseButtonPressed += new EventHandler<SFMLMouseButtonEventArgs>(delegate
                     {
                         if (!_focused)
                             _window.SetFocus();
@@ -207,7 +244,7 @@ namespace BubbasEngine.Engine.Windows
             // Set up EventHandlers
             _gainedFocus += new EventHandler(delegate { _focused = true; });
             _lostFocus += new EventHandler(delegate { _focused = false; });
-            _shutWindow += new EventHandler<ShutWindowEventArgs>(delegate { _open = false; });
+            _shutWindow += new EventHandler<EventArgs>(delegate { _open = false; });
 
             // Apply EventHandlers to window
             _window.GainedFocus += _gainedFocus;
@@ -228,32 +265,32 @@ namespace BubbasEngine.Engine.Windows
         { add { _window.JoystickDisconnected += value; } remove { _window.JoystickDisconnected -= value; } }
         internal event EventHandler<JoystickMoveEventArgs> JoystickMoved
         { add { _window.JoystickMoved += value; } remove { _window.JoystickMoved -= value; } }
-        internal event EventHandler<KeyEventArgs> KeyPressed
+        internal event EventHandler<SFMLKeyEventArgs> KeyPressed
         { add { _window.KeyPressed += value; } remove { _window.KeyPressed -= value; } }
-        internal event EventHandler<KeyEventArgs> KeyReleased
+        internal event EventHandler<SFMLKeyEventArgs> KeyReleased
         { add { _window.KeyReleased += value; } remove { _window.KeyReleased -= value; } }
         public event EventHandler LostFocus
         { add { _window.LostFocus += value; } remove { _window.LostFocus -= value; } }
-        internal event EventHandler<MouseButtonEventArgs> MouseButtonPressed
+        internal event EventHandler<SFMLMouseButtonEventArgs> MouseButtonPressed
         { add { _window.MouseButtonPressed += value; } remove { _window.MouseButtonPressed -= value; } }
-        internal event EventHandler<MouseButtonEventArgs> MouseButtonReleased
+        internal event EventHandler<SFMLMouseButtonEventArgs> MouseButtonReleased
         { add { _window.MouseButtonReleased += value; } remove { _window.MouseButtonReleased -= value; } }
         internal event EventHandler MouseEntered
         { add { _window.MouseEntered += value; } remove { _window.MouseEntered -= value; } }
         internal event EventHandler MouseLeft
         { add { _window.MouseLeft += value; } remove { _window.MouseLeft -= value; } }
-        internal event EventHandler<MouseMoveEventArgs> MouseMoved
+        internal event EventHandler<SFMLMouseMoveEventArgs> MouseMoved
         { add { _window.MouseMoved += value; } remove { _window.MouseMoved -= value; } }
-        internal event EventHandler<MouseWheelEventArgs> MouseWheelMoved
+        internal event EventHandler<SFMLMouseWheelEventArgs> MouseWheelMoved
         { add { _window.MouseWheelMoved += value; } remove { _window.MouseWheelMoved -= value; } }
-        public event EventHandler<SizeEventArgs> Resized
+        public event EventHandler<ResizedWindowEventArgs> Resized
         { add { _window.Resized += value; } remove { _window.Resized -= value; } }
         internal event EventHandler<TextEventArgs> TextEntered
         { add { _window.TextEntered += value; } remove { _window.TextEntered -= value; } }
 
         public event EventHandler<ClosingWindowEventArgs> Closing
         { add { _window.Closing += value; } remove { _window.Closing -= value; } }
-        public event EventHandler<ShutWindowEventArgs> Shut
+        public event EventHandler<EventArgs> Shut
         { add { _window.Shut += value; } remove { _window.Shut -= value; } }
         public event EventHandler<TitleChangedEventArgs> TitleChanged
         { add { _window.TitleChanged += value; } remove { _window.TitleChanged -= value; } }
@@ -274,7 +311,7 @@ namespace BubbasEngine.Engine.Windows
         {
             _window.Display();
         }
-        internal void Draw(Drawable draw)
+        internal void Draw(IDrawable draw)
         {
             _window.Draw(draw);
         }

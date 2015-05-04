@@ -5,7 +5,7 @@ using System.Security;
 using System.Collections.Generic;
 using SFML.Window;
 
-namespace SFML
+namespace BubbasEngine.SFMLGraphics
 {
     namespace Graphics
     {

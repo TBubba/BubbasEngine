@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using BubbasEngine.Engine.Graphics.Drawables;
-using SFML.Graphics;
-using SFML.Window;
 using BubbasEngine.Engine.Input.Devices;
+using BubbasEngine.Engine.Generic;
 
 namespace BubbasEngine.Engine.Debugging
 {
@@ -14,14 +13,11 @@ namespace BubbasEngine.Engine.Debugging
         // Private
         private bool _hide;
 
-        private BText _topLeft;
-        private BSprite _cursor;
-        private BSprite _cursorScaled;
+        private Text _topLeft;
+        private Sprite _cursor;
+        private Sprite _cursorScaled;
 
         private bool _resoursesMissing;
-
-        private KeyboardBindingCollection _keys;
-        private MouseBindingCollection _mouse;
 
         private DebugArgs _args;
 
@@ -30,27 +26,22 @@ namespace BubbasEngine.Engine.Debugging
         {
             // Copy args
             _args = new DebugArgs(args);
-
-            // Keybindings
-            _keys = new KeyboardBindingCollection();
-            _keys.AddOnPressed(Keyboard.Key.F2,
-                new KeyboardBinding(new KeyboardInputDele(delegate
-                    {
-                        ToggleShow();
-                    })));
-
-            _mouse = new MouseBindingCollection();
-            _mouse.AddOnMoved(new MouseMoveBinding((x, y) =>
-                {
-                    //_cursor.Position = new Vector2f(x, y);
-                    //_cursorScaled.Position = new Vector2f(x, y) / _graphics.Scale;
-                }));
         }
 
         //
         public override void Initialize()
         {
+            // Keybindings
+            _keyboard.AddOnPressed(Keyboard.Key.F2, (k) =>
+            {
 
+            });
+
+            _mouse.AddOnMoved((m) =>
+            {
+                //_cursor.Position = new Vector2f(m.X, m.Y);
+                //_cursorScaled.Position = new Vector2f(m.X, m.Y) / _graphics.Scale;
+            });
         }
 
         public override void LoadContent()
@@ -85,10 +76,6 @@ namespace BubbasEngine.Engine.Debugging
             _cursorScaled = new BSprite(_content.GetTexture(pixelPath));
             _cursorScaled.Color = Color.Red;
             */
-
-            // Apply Keybindings
-            _keys.Apply(_input.Keyboard);
-            _mouse.Apply(_input.Mouse);
         }
 
         public override void BeginFrame()
@@ -100,14 +87,14 @@ namespace BubbasEngine.Engine.Debugging
         {
             // If there is any text to change
             if (_topLeft != null)
-                _topLeft.Text = string.Format("TimeStep: {0}\n" +
-                                              "TimeSinceStep: {1}\n" +
-                                              "GoalFPS: {2}\n" +
-                                              "Current FPS: {3}",
-                                              _engine.Time.TimeSinceStep().ToString(),
-                                              _engine.Time.LastFrameTime(),
-                                              _engine.Time.GetGoalFPS(),
-                                              "i dont fking know");
+                _topLeft.DisplayedString = string.Format("TimeStep: {0}\n" +
+                                                         "TimeSinceStep: {1}\n" +
+                                                         "GoalFPS: {2}\n" +
+                                                         "Current FPS: {3}",
+                                                         _engine.Time.TimeSinceStep().ToString(),
+                                                         _engine.Time.LastFrameTime(),
+                                                         _engine.Time.GetGoalFPS(),
+                                                         "i dont fking know");
         }
 
         public override void Animate(float delta)
@@ -118,10 +105,6 @@ namespace BubbasEngine.Engine.Debugging
         {
             // Unload content
             //content.DEQUSET(this, @"intro\logo.png");
-
-            // Remove Keybindings
-            _keys.Remove(_input.Keyboard);
-            _mouse.Remove(_input.Mouse);
         }
 
         //

@@ -22,6 +22,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -56,15 +58,15 @@
     <Compile Include="Engine\GameWorlds\GameInterfaces\IGameRemoved.cs" />
     <Compile Include="Engine\GameWorlds\GameInterfaces\IGameStep.cs" />
     <Compile Include="Engine\GameWorlds\GameWorld.cs" />
-    <Compile Include="Engine\Graphics\Drawables\Shapes\BBodyShape.cs" />
+    <Compile Include="Engine\Generic\DeleHandle.cs" />
+    <Compile Include="Engine\Generic\FloatRect.cs" />
+    <Compile Include="Engine\Graphics\Glyph.cs" />
+    <Compile Include="Engine\Generic\IntRect.cs" />
+    <Compile Include="Engine\Generic\Vector2f.cs" />
+    <Compile Include="Engine\Generic\Vector2i.cs" />
+    <Compile Include="Engine\Generic\Vector2u.cs" />
     <Compile Include="Engine\Graphics\RenderableContainer.cs" />
-    <Compile Include="Engine\Graphics\Drawables\Shapes\BCircleShape.cs" />
-    <Compile Include="Engine\Graphics\Drawables\Shapes\BConvexShape.cs" />
-    <Compile Include="Engine\Graphics\Drawables\Shapes\BRectangleShape.cs" />
-    <Compile Include="Engine\Graphics\Drawables\Shapes\BShape.cs" />
-    <Compile Include="Engine\Graphics\Drawables\BText.cs" />
-    <Compile Include="Engine\Graphics\Drawables\BVertexArray.cs" />
-    <Compile Include="Engine\Graphics\GraphicsLayerContainer.cs" />
+    <Compile Include="Engine\Graphics\Rendering\GraphicsLayerContainer.cs" />
     <Compile Include="Engine\Input\Devices\JoystickDevice.cs" />
     <Compile Include="Engine\Input\Devices\MouseBindingCollection.cs" />
     <Compile Include="Engine\NativeMethods.cs" />
@@ -75,11 +77,10 @@
     <Compile Include="Engine\GameStates\GameStateCondition.cs" />
     <Compile Include="Engine\GameStates\GameStateManager.cs" />
     <Compile Include="Engine\GameStates\GameStateManagerArgs.cs" />
-    <Compile Include="Engine\Graphics\Drawables\BSprite.cs" />
-    <Compile Include="Engine\Graphics\Drawables\IRenderable.cs" />
-    <Compile Include="Engine\Graphics\GraphicsLayer.cs" />
-    <Compile Include="Engine\Graphics\GraphicsRenderer.cs" />
-    <Compile Include="Engine\Graphics\GraphicsRendererArgs.cs" />
+    <Compile Include="Engine\Graphics\Drawables\IDrawable.cs" />
+    <Compile Include="Engine\Graphics\Rendering\GraphicsLayer.cs" />
+    <Compile Include="Engine\Graphics\Rendering\GraphicsRenderer.cs" />
+    <Compile Include="Engine\Graphics\Rendering\GraphicsRendererArgs.cs" />
     <Compile Include="Engine\Maths.cs" />
     <Compile Include="Engine\Physics\Collision\Collision.cs" />
     <Compile Include="Engine\Physics\Collision\Distance.cs" />
@@ -198,6 +199,38 @@
     <Compile Include="Engine\Physics\Factories\JointFactory.cs" />
     <Compile Include="Engine\Physics\Factories\LinkFactory.cs" />
     <Compile Include="Engine\Physics\Settings.cs" />
+    <Compile Include="Engine\Graphics\BlendMode.cs" />
+    <Compile Include="Engine\Graphics\Drawables\CircleShape.cs" />
+    <Compile Include="Engine\Generic\Color.cs" />
+    <Compile Include="Engine\Graphics\Context.cs" />
+    <Compile Include="Engine\Graphics\Drawables\ConvexShape.cs" />
+    <Compile Include="Engine\Graphics\Font.cs" />
+    <Compile Include="Engine\Graphics\Image.cs" />
+    <Compile Include="Engine\Graphics\Drawables\RectangleShape.cs" />
+    <Compile Include="Engine\Graphics\RenderStates.cs" />
+    <Compile Include="Engine\Graphics\RenderTarget.cs" />
+    <Compile Include="Engine\Graphics\RenderTexture.cs" />
+    <Compile Include="Engine\Graphics\RenderWindow.cs" />
+    <Compile Include="Engine\Graphics\Shader.cs" />
+    <Compile Include="Engine\Graphics\Drawables\Shape.cs" />
+    <Compile Include="Engine\Graphics\Drawables\Sprite.cs" />
+    <Compile Include="Engine\Graphics\Drawables\Text.cs" />
+    <Compile Include="Engine\Graphics\Texture.cs" />
+    <Compile Include="Engine\Generic\Transform.cs" />
+    <Compile Include="Engine\Graphics\Drawables\Transformable.cs" />
+    <Compile Include="Engine\Graphics\Vertex.cs" />
+    <Compile Include="Engine\Graphics\Drawables\VertexArray.cs" />
+    <Compile Include="Engine\Graphics\View.cs" />
+    <Compile Include="Engine\Graphics\ViewRef.cs" />
+    <Compile Include="Engine\Windows\ContextSettings.cs" />
+    <Compile Include="Engine\Windows\SFMLEvent.cs" />
+    <Compile Include="Engine\Windows\SFMLEventArgs.cs" />
+    <Compile Include="Engine\Input\Devices\Joystick.cs" />
+    <Compile Include="Engine\Content\LoadingFailedException.cs" />
+    <Compile Include="Engine\ObjectBase.cs" />
+    <Compile Include="Engine\StreamAdaptor.cs" />
+    <Compile Include="Engine\Windows\VideoMode.cs" />
+    <Compile Include="Engine\Windows\Window.cs" />
     <Compile Include="Engine\TypeConverter.cs" />
     <Compile Include="Engine\UnitConverter.cs" />
     <Compile Include="Engine\Users\ILocalUser.cs" />
@@ -208,9 +241,9 @@
     <Compile Include="Engine\Timing\TimeManager.cs" />
     <Compile Include="Engine\Timing\TimeManagerArgs.cs" />
     <Compile Include="Engine\Windows\GameWindow.cs" />
-    <Compile Include="Engine\Input\Devices\KeyboardDevice.cs" />
+    <Compile Include="Engine\Input\Devices\Keyboard.cs" />
     <Compile Include="Engine\Input\Devices\KeyboardBindingCollection.cs" />
-    <Compile Include="Engine\Input\Devices\MouseDevice.cs" />
+    <Compile Include="Engine\Input\Devices\Mouse.cs" />
     <Compile Include="Engine\Input\InputManager.cs" />
     <Compile Include="Engine\Input\InputSettings.cs" />
     <Compile Include="Engine\Input\InputSettingsArgs.cs" />
@@ -219,6 +252,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Engine\Audio\" />
+    <Folder Include="Engine\SFMLWindow\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="csfml-audio-2.dll">
@@ -236,16 +270,6 @@
     <Content Include="openal32.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Graphics\sfml-graphics.csproj">
-      <Project>{46786269-57B9-48E7-AA4F-8F4D84609FE6}</Project>
-      <Name>sfml-graphics</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Window\sfml-window.csproj">
-      <Project>{D17DE83D-A592-461F-8AF2-53F9E22E1D0F}</Project>
-      <Name>sfml-window</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

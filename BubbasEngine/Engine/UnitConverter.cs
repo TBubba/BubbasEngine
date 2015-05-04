@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using SFML.Window;
+﻿using BubbasEngine.Engine.Generic;
 using BubbasEngine.Engine.Physics.Common;
 
 namespace BubbasEngine.Engine

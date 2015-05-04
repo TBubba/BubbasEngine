@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BubbasEngine.Engine.Input;
-using BubbasEngine.Engine.Windows;
-using BubbasEngine.Engine.Content;
-using BubbasEngine.Engine.Timing;
-using BubbasEngine.Engine.GameStates;
-using BubbasEngine.Engine.Graphics;
+﻿using BubbasEngine.Engine.Content;
 using BubbasEngine.Engine.Debugging;
+using BubbasEngine.Engine.GameStates;
+using BubbasEngine.Engine.Graphics.Rendering;
+using BubbasEngine.Engine.Input;
+using BubbasEngine.Engine.Timing;
+using BubbasEngine.Engine.Windows;
 
 namespace BubbasEngine.Engine
 {

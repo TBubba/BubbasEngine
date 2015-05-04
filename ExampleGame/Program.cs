@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Threading;
 using BubbasEngine.Engine;
 using ExampleGame.GameContent;
-using System.Threading;
 
 namespace ExampleGame
 {
@@ -43,7 +39,7 @@ namespace ExampleGame
                     FocusedKeyoardInputOnly = false,
                     FocusedMouseInputOnly = false
                 },
-                Graphics = new BubbasEngine.Engine.Graphics.GraphicsRendererArgs() // Graphics
+                Graphics = new BubbasEngine.Engine.Graphics.Rendering.GraphicsRendererArgs() // Graphics
                 {
                     ResolutionWidth = (int)((float)winWidth * resScale),
                     ResolutionHeight = (int)((float)winHeight * resScale)
@@ -57,8 +53,8 @@ namespace ExampleGame
                     CreateWindow = true,
                     WindowWidth = winWidth,
                     WindowHeight = winHeight,
-                    WindowTitle = "[Bubbas Engine] Example Game",
-                    WindowStyle = SFML.Window.Styles.Close
+                    WindowTitle = "[Bubbas Engine] Example Game"//,
+                    //WindowStyle = SFML.Window.Styles.Close
                 }
             };
 

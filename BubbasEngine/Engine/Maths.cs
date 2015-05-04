@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using SFML.Window;
+using BubbasEngine.Engine.Generic;
 
 namespace BubbasEngine.Engine
 {

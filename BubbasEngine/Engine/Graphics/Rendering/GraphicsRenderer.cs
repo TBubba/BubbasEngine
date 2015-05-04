@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using SFML.Graphics;
+﻿using BubbasEngine.Engine.Generic;
 using BubbasEngine.Engine.Graphics.Drawables;
-using SFML.Window;
 
-namespace BubbasEngine.Engine.Graphics
+namespace BubbasEngine.Engine.Graphics.Rendering
 {
     public class GraphicsRenderer
     {
         // Private
         private GraphicsLayerContainer _layers;
 
-        private RenderTarget _target; // Window
+        private IRenderTarget _target; // Window
         private RenderTexture _proxy; // Render
 
         private IntRect _flipScale; // Flip (Kind of a hacky way to get around negative scaling)
@@ -58,7 +53,7 @@ namespace BubbasEngine.Engine.Graphics
             _flipScale = new IntRect(0, (int)_proxy.Size.Y, (int)_proxy.Size.X, -(int)_proxy.Size.Y);
             UpdateScale();
         }
-        internal void SetRenderTarget(RenderTarget target)
+        internal void SetRenderTarget(IRenderTarget target)
         {
             _target = target;
             UpdateScale();
@@ -71,7 +66,7 @@ namespace BubbasEngine.Engine.Graphics
             float pWidth = (_proxy == null) ? 1f : (float)_proxy.Size.X;
             float pHeight = (_proxy == null) ? 1f : (float)_proxy.Size.Y;
 
-            _scale = new SFML.Window.Vector2f(tWidth / pWidth, tHeight / pHeight);
+            _scale = new Vector2f(tWidth / pWidth, tHeight / pHeight);
         }
 
         // Render (Render the current batch as usual)
@@ -93,7 +88,7 @@ namespace BubbasEngine.Engine.Graphics
         }
 
         // RenderToTarget (Renders current batch to parameter target)
-        internal void RenderToTarget(RenderTarget target)
+        internal void RenderToTarget(IRenderTarget target)
         {
             // Keep view
             View view = target.GetView();

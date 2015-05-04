@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BubbasEngine.Engine.Graphics.Drawables;
-using SFML.Graphics;
-
-namespace BubbasEngine.Engine.Graphics
+﻿
+namespace BubbasEngine.Engine.Graphics.Rendering
 {
     public class GraphicsLayer
     {
@@ -45,7 +39,7 @@ namespace BubbasEngine.Engine.Graphics
         }
 
         // Render
-        internal void Render(RenderTarget target)
+        internal void Render(IRenderTarget target)
         {
             // Abort if hidden
             if (_hide)
@@ -60,7 +54,7 @@ namespace BubbasEngine.Engine.Graphics
             // Render
             _renderables.Render(target);
         }
-        internal void RenderTo(RenderTarget target)
+        internal void RenderTo(IRenderTarget target)
         {
             _renderables.Render(target);
         }

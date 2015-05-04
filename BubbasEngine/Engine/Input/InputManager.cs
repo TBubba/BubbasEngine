@@ -1,19 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using SFML.Window;
+using System.Collections.ObjectModel;
 using BubbasEngine.Engine.Input.Devices;
 using BubbasEngine.Engine.Windows;
-using BubbasEngine.Engine.GameStates;
 
 namespace BubbasEngine.Engine.Input
 {
+    /// <summary>
+    /// Represents the state of a button or key
+    /// </summary>
+    public enum InputState
+    {
+        /// <summary>
+        /// Button/Key is up
+        /// </summary>
+        Up,
+
+        /// <summary>
+        /// Button/Key was pressed (this tick)
+        /// </summary>
+        Pressed,
+
+        /// <summary>
+        /// Button/Key is down
+        /// </summary>
+        Down,
+
+        /// <summary>
+        /// Button/Key was released (this tick)
+        /// </summary>
+        Released
+    }
+
+    /// <summary>
+    /// Handles input and input-devices
+    /// </summary>
     public class InputManager
     {
         // Private
-        private KeyboardDevice _keyboard;
-        private MouseDevice _mouse;
+        private Devices.Keyboard _keyboard;
+        private Mouse _mouse;
+        private List<JoystickDevice> _joysticks;
 
         private InputSettings _settings;
         private GameWindow _window;
@@ -25,17 +52,23 @@ namespace BubbasEngine.Engine.Input
         { get { return _settings; } }
 
         // Public devices
-        public MouseDevice Mouse
+        public Mouse Mouse
         { get { return _mouse; } }
-        public KeyboardDevice Keyboard
+        public Devices.Keyboard Keyboard
         { get { return _keyboard; } }
+        public ReadOnlyCollection<JoystickDevice> Joysticks
+        { get; private set; }
         
         // Constructor(s)
         internal InputManager(InputSettingsArgs args)
         {
             // Create devices
-            _keyboard = new KeyboardDevice();
-            _mouse = new MouseDevice();
+            _keyboard = new Keyboard();
+            _mouse = new Mouse();
+
+            // Create container for joysticks
+            _joysticks = new List<JoystickDevice>();
+            Joysticks = _joysticks.AsReadOnly();
 
             // Settings
             _settings = new InputSettings(args);

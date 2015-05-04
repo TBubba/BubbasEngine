@@ -1,6 +1,5 @@
 ﻿using BubbasEngine.Engine.Physics.Dynamics;
 using BubbasEngine.Engine.Physics.Common;
-using SFML.Window;
 
 namespace BubbasEngine.Engine.Physics.Controllers
 {

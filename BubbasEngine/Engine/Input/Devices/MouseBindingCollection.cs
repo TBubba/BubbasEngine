@@ -1,42 +1,73 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using SFML.Window;
+using BubbasEngine.Engine.Generic;
 
 namespace BubbasEngine.Engine.Input.Devices
 {
     public class MouseBindingCollection
     {
-        // Private
-        private Dictionary<Mouse.Button, List<EventHandler<MouseButtonEventArgs2>>> _onButtonPressed;
-        private Dictionary<Mouse.Button, List<EventHandler<MouseButtonEventArgs2>>> _onButtonReleased;
-        private List<EventHandler<MouseWheelEventArgs2>> _onWheelMoved;
-        private List<EventHandler<MouseMoveEventArgs2>> _onMoved;
+        /// <summary>
+        /// Chains a MouseBindingCollection to another
+        /// (calling events from "chain" will also call events from "link")
+        /// (same as calling chain.Chain(link))
+        /// </summary>
+        /// <param name="chain">The collection that the "link" will be chained to</param>
+        /// <param name="link">The collection that will be chained to the "chain"</param>
+        /// <returns>"Chain" parameter</returns>
+        public static MouseBindingCollection operator +(MouseBindingCollection chain, MouseBindingCollection link)
+        {
+            // Add link to chain
+            chain.Chain(link);
 
-        // Internal
-        /*
-        internal Dictionary<Mouse.Button, List<EventHandler<MouseButtonEventArgs2>>> OnButtonPressed
-        { get { return _onButtonPressed; } }
-        internal Dictionary<Mouse.Button, List<EventHandler<MouseButtonEventArgs2>>> OnButtonReleased
-        { get { return _onButtonReleased; } }
-        internal List<EventHandler<MouseWheelEventArgs2>> OnWheelMoved
-        { get { return _onWheelMoved; } }
-        internal List<MouseMoveEventArgs2> OnMoved
-        { get { return _onMoved; } }
-        */
+            // Return chain
+            return chain;
+        }
+        /// <summary>
+        /// Dechains a MouseBindingCollection from another
+        /// (calling events from "chain" will no longer call events from "link" - if they were chained before)
+        /// (same as calling chain.Dechain(link))
+        /// </summary>
+        /// <param name="chain">The collection that the "link" will be dechained from</param>
+        /// <param name="link">The collection that will be dechained to the "chain"</param>
+        /// <returns>"Chain" parameter</returns>
+        public static MouseBindingCollection operator -(MouseBindingCollection chain, MouseBindingCollection link)
+        {
+            // Add link to chain
+            chain.Dechain(link);
+
+            // Return chain
+            return chain;
+        }
+
+        // Private
+        private Dictionary<Mouse.Button, List<DeleHandler<MouseButtonEventArgs>>> _onButtonPressed;
+        private Dictionary<Mouse.Button, List<DeleHandler<MouseButtonEventArgs>>> _onButtonReleased;
+        private List<DeleHandler<MouseWheelEventArgs>> _onWheelMoved;
+        private List<DeleHandler<MouseMoveEventArgs>> _onMoved;
+
+        private event DeleHandler<MouseButtonEventArgs> _buttonPressed;
+        private event DeleHandler<MouseButtonEventArgs> _buttonReleased;
+        private event DeleHandler<MouseWheelEventArgs> _wheelMoved;
+        private event DeleHandler<MouseMoveEventArgs> _moved;
 
         // Constructor(s)
         public MouseBindingCollection()
         {
-            _onButtonPressed = new Dictionary<Mouse.Button, List<EventHandler<MouseButtonEventArgs2>>>();
-            _onButtonReleased = new Dictionary<Mouse.Button, List<EventHandler<MouseButtonEventArgs2>>>();
-            _onWheelMoved = new List<EventHandler<MouseWheelEventArgs2>>();
-            _onMoved = new List<EventHandler<MouseMoveEventArgs2>>();
+            //
+            _onButtonPressed = new Dictionary<Mouse.Button, List<DeleHandler<MouseButtonEventArgs>>>();
+            _onButtonReleased = new Dictionary<Mouse.Button, List<DeleHandler<MouseButtonEventArgs>>>();
+            _onWheelMoved = new List<DeleHandler<MouseWheelEventArgs>>();
+            _onMoved = new List<DeleHandler<MouseMoveEventArgs>>();
+
+            //
+            _buttonPressed = OnPressed;
+            _buttonReleased = OnReleased;
+            _wheelMoved = OnWheelMoved;
+            _moved = OnMoved;
         }
 
         // Add
-        public void AddOnPressed(Mouse.Button button, EventHandler<MouseButtonEventArgs2> bind)
+        public void AddOnPressed(Mouse.Button button, DeleHandler<MouseButtonEventArgs> bind)
         {
             // Throw if "count" is passed
             if (button == Mouse.Button.ButtonCount)
@@ -44,12 +75,12 @@ namespace BubbasEngine.Engine.Input.Devices
 
             // Create if it doesnt exist
             if (!_onButtonPressed.ContainsKey(button))
-                _onButtonPressed.Add(button, new List<EventHandler<MouseButtonEventArgs2>>());
+                _onButtonPressed.Add(button, new List<DeleHandler<MouseButtonEventArgs>>());
 
             // Add
             _onButtonPressed[button].Add(bind);
         }
-        public void AddOnReleased(Mouse.Button button, EventHandler<MouseButtonEventArgs2> bind)
+        public void AddOnReleased(Mouse.Button button, DeleHandler<MouseButtonEventArgs> bind)
         {
             // Throw if "count" is passed
             if (button == Mouse.Button.ButtonCount)
@@ -57,42 +88,42 @@ namespace BubbasEngine.Engine.Input.Devices
 
             // Create if it doesnt exist
             if (!_onButtonReleased.ContainsKey(button))
-                _onButtonReleased.Add(button, new List<EventHandler<MouseButtonEventArgs2>>());
+                _onButtonReleased.Add(button, new List<DeleHandler<MouseButtonEventArgs>>());
 
             // Add
             _onButtonReleased[button].Add(bind);
         }
-        public void AddOnAnyPressed(EventHandler<MouseButtonEventArgs2> bind)
+        public void AddOnAnyPressed(DeleHandler<MouseButtonEventArgs> bind)
         {
             // Create if it doesnt exist
             if (!_onButtonPressed.ContainsKey(Mouse.Button.ButtonCount)) // ButtonCount is used as "Any button"
-                _onButtonPressed.Add(Mouse.Button.ButtonCount, new List<EventHandler<MouseButtonEventArgs2>>());
+                _onButtonPressed.Add(Mouse.Button.ButtonCount, new List<DeleHandler<MouseButtonEventArgs>>());
 
             // Add
             _onButtonPressed[Mouse.Button.ButtonCount].Add(bind);
         }
-        public void AddOnAnyReleased(EventHandler<MouseButtonEventArgs2> bind)
+        public void AddOnAnyReleased(DeleHandler<MouseButtonEventArgs> bind)
         {
             // Create if it doesnt exist
             if (!_onButtonReleased.ContainsKey(Mouse.Button.ButtonCount))
-                _onButtonReleased.Add(Mouse.Button.ButtonCount, new List<EventHandler<MouseButtonEventArgs2>>());
+                _onButtonReleased.Add(Mouse.Button.ButtonCount, new List<DeleHandler<MouseButtonEventArgs>>());
 
             // Add
             _onButtonReleased[Mouse.Button.ButtonCount].Add(bind);
         }
-        public void AddOnWheelChanged(EventHandler<MouseWheelEventArgs2> bind)
+        public void AddOnWheelChanged(DeleHandler<MouseWheelEventArgs> bind)
         {
             // Add
             _onWheelMoved.Add(bind);
         }
-        public void AddOnMoved(EventHandler<MouseMoveEventArgs2> bind)
+        public void AddOnMoved(DeleHandler<MouseMoveEventArgs> bind)
         {
             // Add
             _onMoved.Add(bind);
         }
 
         // Remove
-        public void RemoveOnPressed(Mouse.Button button, EventHandler<MouseButtonEventArgs2> bind)
+        public void RemoveOnPressed(Mouse.Button button, DeleHandler<MouseButtonEventArgs> bind)
         {
             // Throw if "count" is passed
             if (button == Mouse.Button.ButtonCount)
@@ -118,7 +149,7 @@ namespace BubbasEngine.Engine.Input.Devices
             else
                 GameConsole.WriteLine(string.Format("InputMouse: Tried to remove keybinding from non-bound button (Button:{0}, OnPressed)", button), GameConsole.MessageType.Error); // Debug
         }
-        public void RemoveOnAnyPressed(EventHandler<MouseButtonEventArgs2> bind)
+        public void RemoveOnAnyPressed(DeleHandler<MouseButtonEventArgs> bind)
         {
             // Remove
             if (_onButtonPressed.ContainsKey(Mouse.Button.ButtonCount))
@@ -126,7 +157,7 @@ namespace BubbasEngine.Engine.Input.Devices
                 // Remove keybinding
                 if (!_onButtonPressed[Mouse.Button.ButtonCount].Remove(bind))
                 {
-                    GameConsole.WriteLine(string.Format("InputMouse: Tried to remove non-exsiting keybinding (Button:{0}, OnPressed)", button), GameConsole.MessageType.Error); // Debug
+                    GameConsole.WriteLine("InputMouse: Tried to remove non-exsiting keybinding (OnAnyPressed)", GameConsole.MessageType.Error); // Debug
                     return;
                 }
 
@@ -134,13 +165,13 @@ namespace BubbasEngine.Engine.Input.Devices
                 if (_onButtonPressed[Mouse.Button.ButtonCount].Count == 0)
                 {
                     _onButtonPressed.Remove(Mouse.Button.ButtonCount);
-                    GameConsole.WriteLine(string.Format("InputMouse: No more keybindings to this button - therefore remove button (Button:{0}, OnPressed)", button), GameConsole.MessageType.Important); // Debug
+                    GameConsole.WriteLine("InputMouse: No more keybindings to this button - therefore remove button (OnAnyPressed)", GameConsole.MessageType.Important); // Debug
                 }
             }
             else
-                GameConsole.WriteLine(string.Format("InputMouse: Tried to remove keybinding from non-bound button (Button:{0}, OnPressed)", button), GameConsole.MessageType.Error); // Debug
+                GameConsole.WriteLine("InputMouse: Tried to remove keybinding from non-bound button (OnAnyPressed)", GameConsole.MessageType.Error); // Debug
         }
-        public void RemoveOnReleased(Mouse.Button button, EventHandler<MouseButtonEventArgs2> bind)
+        public void RemoveOnReleased(Mouse.Button button, DeleHandler<MouseButtonEventArgs> bind)
         {
             // Throw if "count" is passed
             if (button == Mouse.Button.ButtonCount)
@@ -166,7 +197,7 @@ namespace BubbasEngine.Engine.Input.Devices
             else
                 GameConsole.WriteLine(string.Format("InputMouse: Tried to remove keybinding from non-bound button (Button:{0}, OnReleased)", button), GameConsole.MessageType.Error); // Debug
         }
-        public void RemoveOnAnyReleased(EventHandler<MouseButtonEventArgs2> bind)
+        public void RemoveOnAnyReleased(DeleHandler<MouseButtonEventArgs> bind)
         {
             // Remove
             if (_onButtonReleased.ContainsKey(Mouse.Button.ButtonCount))
@@ -174,7 +205,7 @@ namespace BubbasEngine.Engine.Input.Devices
                 // Remove keybinding
                 if (!_onButtonReleased[Mouse.Button.ButtonCount].Remove(bind))
                 {
-                    GameConsole.WriteLine(string.Format("InputMouse: Tried to remove non-exsiting keybinding (Button:{0}, OnReleased)", button), GameConsole.MessageType.Error); // Debug
+                    GameConsole.WriteLine("InputMouse: Tried to remove non-exsiting keybinding (OnAnyReleased)", GameConsole.MessageType.Error); // Debug
                     return;
                 }
 
@@ -182,13 +213,13 @@ namespace BubbasEngine.Engine.Input.Devices
                 if (_onButtonReleased[Mouse.Button.ButtonCount].Count == 0)
                 {
                     _onButtonReleased.Remove(Mouse.Button.ButtonCount);
-                    GameConsole.WriteLine(string.Format("InputMouse: No more keybindings to this button - therefore remove button (Button:{0}, OnReleased)", button), GameConsole.MessageType.Important); // Debug
+                    GameConsole.WriteLine("InputMouse: No more keybindings to this button - therefore remove button (OnAnyReleased)", GameConsole.MessageType.Important); // Debug
                 }
             }
             else
-                GameConsole.WriteLine(string.Format("InputMouse: Tried to remove keybinding from non-bound button (Button:{0}, OnReleased)", button), GameConsole.MessageType.Error); // Debug
+                GameConsole.WriteLine("InputMouse: Tried to remove keybinding from non-bound button (OnAnyReleased)", GameConsole.MessageType.Error); // Debug
         }
-        public void RemoveOnWheelChanged(EventHandler<MouseWheelEventArgs2> bind)
+        public void RemoveOnWheelChanged(DeleHandler<MouseWheelEventArgs> bind)
         {
             // Remove
             if (_onWheelMoved.Contains(bind))
@@ -198,7 +229,7 @@ namespace BubbasEngine.Engine.Input.Devices
             else
                 GameConsole.WriteLine(string.Format("InputMouse: Tried to remove non-exsiting keybinding (OnWheelChanged)"), GameConsole.MessageType.Error); // Debug
         }
-        public void RemoveOnMoved(EventHandler<MouseMoveEventArgs2> bind)
+        public void RemoveOnMoved(DeleHandler<MouseMoveEventArgs> bind)
         {
             // Remove
             if (_onMoved.Contains(bind))
@@ -209,81 +240,62 @@ namespace BubbasEngine.Engine.Input.Devices
                 GameConsole.WriteLine(string.Format("InputMouse: Tried to remove non-exsiting keybinding (OnMoved)"), GameConsole.MessageType.Error); // Debug
         }
 
-        // Device
-        public void Apply(MouseDevice device)
+        // Chain
+        public void Chain(MouseBindingCollection bindings)
         {
-            // Pressed
-            foreach (KeyValuePair<Mouse.Button, List<MouseButtonBinding>> pair in _onButtonPressed)
-            {
-                int length = pair.Value.Count;
-                for (int i = 0; i < length; i++)
-                    device.AddOnPressed(pair.Key, pair.Value[i]);
-            }
-
-            // Released
-            foreach (KeyValuePair<Mouse.Button, List<MouseButtonBinding>> pair in _onButtonReleased)
-            {
-                int length = pair.Value.Count;
-                for (int i = 0; i < length; i++)
-                    device.AddOnReleased(pair.Key, pair.Value[i]);
-            }
-
-            // Wheel
-            int count = _onWheelMoved.Count;
-            for (int i = 0; i < count; i++)
-            {
-                device.AddOnWheelChanged(_onWheelMoved[i]);
-            }
-
-            // Move
-            count = _onMoved.Count;
-            for (int i = 0; i < count; i++)
-            {
-                device.AddOnMoved(_onMoved[i]);
-            }
+            // Chain bindings
+            _buttonPressed += bindings._buttonPressed;
+            _buttonReleased += bindings._buttonReleased;
+            _wheelMoved += bindings._wheelMoved;
+            _moved += bindings._moved;
         }
-        public void Remove(MouseDevice device)
+        public void Dechain(MouseBindingCollection bindings)
         {
-            // Pressed
-            foreach (KeyValuePair<Mouse.Button, List<MouseButtonBinding>> pair in _onButtonPressed)
-            {
-                int length = pair.Value.Count;
-                for (int i = 0; i < length; i++)
-                    device.RemoveOnPressed(pair.Key, pair.Value[i]);
-            }
-
-            // Released
-            foreach (KeyValuePair<Mouse.Button, List<MouseButtonBinding>> pair in _onButtonReleased)
-            {
-                int length = pair.Value.Count;
-                for (int i = 0; i < length; i++)
-                    device.RemoveOnReleased(pair.Key, pair.Value[i]);
-            }
-
-            // Wheel
-            int count = _onWheelMoved.Count;
-            for (int i = 0; i < count; i++)
-            {
-                device.RemoveOnWheelChanged(_onWheelMoved[i]);
-            }
-
-            // Move
-            count = _onMoved.Count;
-            for (int i = 0; i < count; i++)
-            {
-                device.RemoveOnMoved(_onMoved[i]);
-            }
+            // Dechain bindings
+            _buttonPressed -= bindings._buttonPressed;
+            _buttonReleased -= bindings._buttonReleased;
+            _wheelMoved -= bindings._wheelMoved;
+            _moved -= bindings._moved;
         }
 
         // Call
-        internal void OnPressed(object sender, MouseButtonEventArgs2 args)
+        internal void OnPressed(MouseButtonEventArgs args)
         {
-            switch (args.Button)
-            {
-                case Mouse.Button.ButtonCount: // Any button
-                    _
-                    break;
-            }
+            // Call button pressed
+            if (_onButtonPressed.ContainsKey(args.Button))
+                CallEventList<MouseButtonEventArgs>(_onButtonPressed[args.Button], args);
+
+            // Call any button pressed
+            if (_onButtonPressed.ContainsKey(Mouse.Button.ButtonCount))
+                CallEventList<MouseButtonEventArgs>(_onButtonPressed[Mouse.Button.ButtonCount], args);
+        }
+        internal void OnReleased(MouseButtonEventArgs args)
+        {
+            // Call button released
+            if (_onButtonReleased.ContainsKey(args.Button))
+                CallEventList<MouseButtonEventArgs>(_onButtonReleased[args.Button], args);
+
+            // Call any button released
+            if (_onButtonReleased.ContainsKey(Mouse.Button.ButtonCount))
+                CallEventList<MouseButtonEventArgs>(_onButtonReleased[Mouse.Button.ButtonCount], args);
+        }
+        internal void OnWheelMoved(MouseWheelEventArgs args)
+        {
+            // Call wheel moved
+            CallEventList<MouseWheelEventArgs>(_onWheelMoved, args);
+        }
+        internal void OnMoved(MouseMoveEventArgs args)
+        {
+            // Call mouse moved
+            CallEventList<MouseMoveEventArgs>(_onMoved, args);
+        }
+
+        private static void CallEventList<T>(List<DeleHandler<T>> events, T args)
+            //where T : EventArgs
+        {
+            int length = events.Count;
+            for (int i = 0; i < length; i++)
+                events[i](args);
         }
     }
 }

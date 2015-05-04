@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BubbasEngine.Engine.Content;
-using BubbasEngine.Engine.Windows;
+﻿using BubbasEngine.Engine.Content;
+using BubbasEngine.Engine.Graphics.Rendering;
 using BubbasEngine.Engine.Input;
-using BubbasEngine.Engine.Graphics;
-using BubbasEngine.Engine.Timing;
 using BubbasEngine.Engine.Input.Devices;
+using BubbasEngine.Engine.Timing;
+using BubbasEngine.Engine.Windows;
 
 namespace BubbasEngine.Engine.GameStates
 {
@@ -52,8 +48,8 @@ namespace BubbasEngine.Engine.GameStates
             _layer = _graphics.Layers.Create();
 
             // Create input binding collections
-            _keyboard = _engine.Input.Keyboard.CreateGameBindigs(this);
-            _mouse = _engine.Input.Mouse.CreateGameBindigs(this);
+            _keyboard = _input.Keyboard.CreateGameBindigs(this);
+            _mouse = _input.Mouse.CreateGameStateBindigs(this);
         }
 
         internal void OnRemoved()
@@ -63,7 +59,8 @@ namespace BubbasEngine.Engine.GameStates
                 _graphics.Layers.Remove(_layer);
 
             // Remove input binding collections
-
+            _input.Keyboard.RemoveGameBindings(this);
+            _input.Mouse.RemoveGameBindings(this);
         }
 
         // Methods
